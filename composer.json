@@ -1,0 +1,16 @@
+{
+    "name": "aspalam/sms-gateway",
+    "description": "Laravel Implementation of SMS Gateway",
+    "require": {
+        "php": ">=7.1"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Abu Salam Parvez Alam",
+            "email": "abusalamparvezalam@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

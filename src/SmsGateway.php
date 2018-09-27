@@ -44,7 +44,7 @@ class SmsGateway implements SmsGatewayContract
         $resp['Content-Type'] = $res->getHeaderLine('Content-Type');
         $resp['data']         = $res->getBody()->read(1024);
         $this->setResponse($resp);
-        return $this;
+        return $this->getResponse();
     }
 
     protected function hashPayload()
@@ -53,7 +53,7 @@ class SmsGateway implements SmsGatewayContract
         if (array_key_exists('key', $payload['form_params'])) {
             $payload['form_params']['key'] = hash('sha512', $this->getUsername().$this->getSenderid().$this->getContents().$this->getSecurekey());
         }
-        dump("data to hash => ".$this->getUsername().$this->getSenderid().$this->getContents().$this->getSecurekey());
+        //dump("data to hash => ".$this->getUsername().$this->getSenderid().$this->getContents().$this->getSecurekey());
         $this->setPayload($payload);
         return $this;
     }
@@ -104,7 +104,7 @@ class SmsGateway implements SmsGatewayContract
     /**
      * @return mixed
      */
-    public function getRecipients()
+    protected function getRecipients()
     {
         return $this->recipients;
     }
@@ -114,7 +114,7 @@ class SmsGateway implements SmsGatewayContract
      *
      * @return self
      */
-    public function setRecipients($recipients)
+    protected function setRecipients($recipients)
     {
         $this->recipients = $recipients;
 
@@ -124,7 +124,7 @@ class SmsGateway implements SmsGatewayContract
     /**
      * @return mixed
      */
-    public function getContents()
+    protected function getContents()
     {
         return $this->contents;
     }
@@ -134,7 +134,7 @@ class SmsGateway implements SmsGatewayContract
      *
      * @return self
      */
-    public function setContents($contents)
+    protected function setContents($contents)
     {
         $this->contents = trim($contents);
 
@@ -144,7 +144,7 @@ class SmsGateway implements SmsGatewayContract
     /**
      * @return mixed
      */
-    public function getGateway()
+    protected function getGateway()
     {
         return $this->gateway;
     }
@@ -154,7 +154,7 @@ class SmsGateway implements SmsGatewayContract
      *
      * @return self
      */
-    public function setGateway($gateway = '')
+    protected function setGateway($gateway = '')
     {
         $this->gateway = $gateway == ''
                 ? config('smsgateway.default')
@@ -165,7 +165,7 @@ class SmsGateway implements SmsGatewayContract
     /**
      * @return mixed
      */
-    public function getUsername()
+    protected function getUsername()
     {
         return $this->username;
     }
@@ -175,19 +175,19 @@ class SmsGateway implements SmsGatewayContract
      *
      * @return self
      */
-    public function setUsername($username = '')
+    protected function setUsername($username = '')
     {
         $this->username = $username == ''
             ? config('smsgateway.' . $this->getGateway() . '.apiValues.apiUser')
             : trim($username);
-        dump(config('smsgateway.' . $this->getGateway() . '.apiValues.apiUser'));
+        //dump(config('smsgateway.' . $this->getGateway() . '.apiValues.apiUser'));
         return $this;
     }
 
     /**
      * @return mixed
      */
-    public function getSenderid()
+    protected function getSenderid()
     {
         return $this->senderid;
     }
@@ -197,19 +197,19 @@ class SmsGateway implements SmsGatewayContract
      *
      * @return self
      */
-    public function setSenderid($senderid = '')
+    protected function setSenderid($senderid = '')
     {
         $this->senderid = $senderid == ''
             ? config('smsgateway.' . $this->getGateway() . '.apiValues.apiSenderId')
             : trim($senderid);
-        dump(config('smsgateway.' . $this->getGateway() . '.apiValues.apiSenderId'));
+        //dump(config('smsgateway.' . $this->getGateway() . '.apiValues.apiSenderId'));
         return $this;
     }
 
     /**
      * @return mixed
      */
-    public function getSecurekey()
+    protected function getSecurekey()
     {
         return $this->securekey;
     }
@@ -219,7 +219,7 @@ class SmsGateway implements SmsGatewayContract
      *
      * @return self
      */
-    public function setSecurekey($securekey = '')
+    protected function setSecurekey($securekey = '')
     {
         $this->securekey = $securekey == ''
             ? config('smsgateway.' . $this->getGateway() . '.apiValues.apiSecureKey')
@@ -233,7 +233,7 @@ class SmsGateway implements SmsGatewayContract
      */
     public function getResponse()
     {
-        return $this->response;
+        return json_encode($this->response, JSON_PRETTY_PRINT);
     }
 
     /**
@@ -241,7 +241,7 @@ class SmsGateway implements SmsGatewayContract
      *
      * @return self
      */
-    public function setResponse($response)
+    protected function setResponse($response)
     {
         $this->response = $response;
 
@@ -251,7 +251,7 @@ class SmsGateway implements SmsGatewayContract
     /**
      * @return mixed
      */
-    public function getPayload()
+    protected function getPayload()
     {
         return $this->payload;
     }
@@ -261,7 +261,7 @@ class SmsGateway implements SmsGatewayContract
      *
      * @return self
      */
-    public function setPayload($payload)
+    protected function setPayload($payload)
     {
         $this->payload = $payload;
 
@@ -271,7 +271,7 @@ class SmsGateway implements SmsGatewayContract
     /**
      * @return mixed
      */
-    public function getApiEndpoint()
+    protected function getApiEndpoint()
     {
         return $this->apiEndpoint;
     }

@@ -2,8 +2,7 @@
     "name": "abusalam/laravel-smsgateway",
     "description": "Laravel Implementation of SMS Gateway",
     "require": {
-        "php": ">=7.1",
-        "guzzlehttp/guzzle": "^6.3"
+        "php": ">=7.1"
     },
     "require-dev": {
         "php": ">=7.1",

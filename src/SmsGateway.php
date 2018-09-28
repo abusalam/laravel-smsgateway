@@ -2,8 +2,6 @@
 
 namespace AbuSalam;
 
-use GuzzleHttp\Client;
-
 /**
  * SMS Gateway Implementation
  */
@@ -38,11 +36,15 @@ class SmsGateway implements SmsGatewayContract
 
     public function sendSms()
     {
-        $client = new Client();
-        $res = $client->request('POST', $this->getApiEndpoint(), $this->getPayload());
-        $resp['code']         = $res->getStatusCode();
-        $resp['Content-Type'] = $res->getHeaderLine('Content-Type');
-        $resp['data']         = $res->getBody()->read(1024);
+        $post = curl_init();
+        //curl_setopt($post, CURLOPT_SSLVERSION, 5); // uncomment for systems supporting TLSv1.1 only
+        curl_setopt($post, CURLOPT_SSLVERSION, 6); // use for systems supporting TLSv1.2 or comment the line
+        curl_setopt($post, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($post, CURLOPT_URL, $this->getApiEndpoint());
+        curl_setopt($post, CURLOPT_POSTFIELDS, http_build_query($this->getPayload()));
+        curl_setopt($post, CURLOPT_RETURNTRANSFER, 1);
+        $resp['data'] = curl_exec($post);
+        curl_close($post);
         $this->setResponse($resp);
         return $this->getResponse();
     }
@@ -50,8 +52,8 @@ class SmsGateway implements SmsGatewayContract
     protected function hashPayload()
     {
         $payload = $this->buildConfigParams();
-        if (array_key_exists('key', $payload['form_params'])) {
-            $payload['form_params']['key'] = hash('sha512', $this->getUsername().$this->getSenderid().$this->getContents().$this->getSecurekey());
+        if (array_key_exists('key', $payload)) {
+            $payload['key'] = hash('sha512', $this->getUsername().$this->getSenderid().$this->getContents().$this->getSecurekey());
         }
         //dump("data to hash => ".$this->getUsername().$this->getSenderid().$this->getContents().$this->getSecurekey());
         $this->setPayload($payload);
@@ -71,9 +73,7 @@ class SmsGateway implements SmsGatewayContract
             config('smsgateway.' . config('smsgateway.default') . '.apiSmsParam') => $this->getContents(),
             "smsservicetype" =>"singlemsg",
         ];
-        $data = [
-            'form_params' => array_merge($form_params, $configParams),
-        ];
+        $data = array_merge($form_params, $configParams);
 
         //dump($data);
         return $data;
@@ -290,8 +290,8 @@ class SmsGateway implements SmsGatewayContract
     public function asOtpSms()
     {
         $payload = $this->getPayload();
-        if (array_key_exists('smsservicetype', $payload['form_params'])) {
-            $payload['form_params']['smsservicetype'] = 'otpmsg';
+        if (array_key_exists('smsservicetype', $payload)) {
+            $payload['smsservicetype'] = 'otpmsg';
             $this->setPayload($payload);
         }
         return $this;
@@ -300,8 +300,8 @@ class SmsGateway implements SmsGatewayContract
     public function asUnicodeOtpSms()
     {
         $payload = $this->getPayload();
-        if (array_key_exists('smsservicetype', $payload['form_params'])) {
-            $payload['form_params']['smsservicetype'] = 'unicodeotpmsg';
+        if (array_key_exists('smsservicetype', $payload)) {
+            $payload['smsservicetype'] = 'unicodeotpmsg';
             $this->setPayload($payload);
         }
         return $this;
@@ -310,8 +310,8 @@ class SmsGateway implements SmsGatewayContract
     public function asUnicodeSms()
     {
         $payload = $this->getPayload();
-        if (array_key_exists('smsservicetype', $payload['form_params'])) {
-            $payload['form_params']['smsservicetype'] = 'unicodemsg';
+        if (array_key_exists('smsservicetype', $payload)) {
+            $payload['smsservicetype'] = 'unicodemsg';
             $this->setPayload($payload);
         }
         return $this;
@@ -325,8 +325,8 @@ class SmsGateway implements SmsGatewayContract
     public function asBulkSms()
     {
         $payload = $this->getPayload();
-        if (array_key_exists('smsservicetype', $payload['form_params'])) {
-            $payload['form_params']['smsservicetype'] = 'bulkmsg';
+        if (array_key_exists('smsservicetype', $payload)) {
+            $payload['smsservicetype'] = 'bulkmsg';
             $this->setPayload($payload);
         }
         return $this;

@@ -1,6 +1,6 @@
-# Send SMS from your Laravel app
+# Send SMS from your Laravel app [![License](https://poser.pugx.org/abusalam/laravel-smsgateway/license)](https://packagist.org/packages/abusalam/laravel-smsgateway) 
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/abusalam/laravel-smsgateway.svg?style=flat-square)](https://packagist.org/packages/abusalam/laravel-smsgateway)
+[![Latest Stable Version](https://poser.pugx.org/abusalam/laravel-smsgateway/v/stable)](https://packagist.org/packages/abusalam/laravel-smsgateway) [![Total Downloads](https://poser.pugx.org/abusalam/laravel-smsgateway/downloads)](https://packagist.org/packages/abusalam/laravel-smsgateway) [![Build Status](https://scrutinizer-ci.com/g/abusalam/laravel-smsgateway/badges/build.png?b=dev)](https://scrutinizer-ci.com/g/abusalam/laravel-smsgateway/build-status/dev) [![Code Intelligence Status](https://scrutinizer-ci.com/g/abusalam/laravel-smsgateway/badges/code-intelligence.svg?b=dev)](https://scrutinizer-ci.com/code-intelligence) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/abusalam/laravel-smsgateway/badges/quality-score.png?b=dev)](https://scrutinizer-ci.com/g/abusalam/laravel-smsgateway/?branch=dev)
 
 The `abusalam/laravel-smsgateway` package provides easy to use functions to send sms from your app. Works with CDAC SMS Gateway Services out of the box.
 
@@ -36,7 +36,7 @@ The package will automatically register itself.
 
 You can optionally publish the config file with:
 ```bash
-php artisan vendor:publish --provider="AbuSalam\SmsGateway\SmsServiceProvider" --tag="config"
+php artisan vendor:publish --provider="AbuSalam\SmsGatewayServiceProvider" --tag="config"
 ```
 
 This is the contents of the published config file:

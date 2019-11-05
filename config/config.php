@@ -12,7 +12,7 @@ return [
     |
     */
     'default' => env('SMS_GATEWAY', 'local'),
-
+	'smagateway' =>env('SMAGATEWAY','loc')
     /*
     |--------------------------------------------------------------------------
     | SMS Gateways

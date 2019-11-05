@@ -12,6 +12,8 @@ return [
     |
     */
     'default' => env('SMS_GATEWAY', 'local'),
+     'smsarpan' => env('smsarpan', 'smsarpan'),
+
 
     /*
     |--------------------------------------------------------------------------

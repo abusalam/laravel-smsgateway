@@ -1,5 +1,5 @@
 <?php
-namespace AbuSalam;
+namespace AbuSalam\Contracts;
 
 interface SmsGatewayContract
 {

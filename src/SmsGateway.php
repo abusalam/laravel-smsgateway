@@ -2,6 +2,8 @@
 
 namespace AbuSalam;
 
+use AbuSalam\Contracts\SmsGatewayContract;
+
 /**
  * SMS Gateway Implementation
  */

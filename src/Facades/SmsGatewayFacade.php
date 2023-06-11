@@ -1,5 +1,5 @@
 <?php
-namespace AbuSalam;
+namespace AbuSalam\Facades;
 
 use Illuminate\Support\Facades\Facade;
 

@@ -40,12 +40,17 @@ class SmsGateway implements SmsGatewayContract
     {
         $post = curl_init();
         //curl_setopt($post, CURLOPT_SSLVERSION, 5); // uncomment for systems supporting TLSv1.1 only
-        curl_setopt($post, CURLOPT_SSLVERSION, 6); // use for systems supporting TLSv1.2 or comment the line
+        //curl_setopt($post, CURLOPT_SSLVERSION, 6); // use for systems supporting TLSv1.2 or comment the line
+        curl_setopt($post, CURLOPT_SSL_VERIFYHOST, 0);
         curl_setopt($post, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($post, CURLOPT_URL, $this->getApiEndpoint());
+        curl_setopt($post, CURLOPT_HTTPHEADER, array('Authorization: Bearer ' . $this->getSecurekey()));
         curl_setopt($post, CURLOPT_POSTFIELDS, http_build_query($this->getPayload()));
         curl_setopt($post, CURLOPT_RETURNTRANSFER, 1);
         $resp['data'] = curl_exec($post);
+        if($resp['data'] === false) {
+            $resp['error'] =  curl_error($post);
+        }
         curl_close($post);
         $this->setResponse($resp);
         return $this->getResponse();

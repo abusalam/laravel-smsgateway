@@ -23,6 +23,8 @@ class SmsGateway implements SmsGatewayContract
 
     protected $securekey;
 
+    protected $tag;
+
     protected $payload;
 
     protected $response;
@@ -78,6 +80,7 @@ class SmsGateway implements SmsGatewayContract
         $form_params = [
             config('smsgateway.' . config('smsgateway.default') . '.apiMobileNoParam') => $this->getRecipients(),
             config('smsgateway.' . config('smsgateway.default') . '.apiSmsParam') => $this->getContents(),
+            config('smsgateway.' . config('smsgateway.default') . '.apiTagParam') => $this->getTag(),
             "smsservicetype" =>"singlemsg",
         ];
         $data = array_merge($form_params, $configParams);
@@ -89,12 +92,23 @@ class SmsGateway implements SmsGatewayContract
     /**
      * Gets the Message for the SMS
      * @param  string
-     * @return [type]
+     * @return self
      */
     public function withSms($contents = '')
     {
         $this->setContents($contents);
         $this->hashPayload();
+        return $this;
+    }
+
+    /**
+     * Gets the Tag for the SMS
+     * @param  mixed
+     * @return self
+     */
+    public function withTag($tag)
+    {
+        $this->setTag($tag);
         return $this;
     }
 
@@ -231,6 +245,26 @@ class SmsGateway implements SmsGatewayContract
         $this->securekey = $securekey == ''
             ? config('smsgateway.' . $this->getGateway() . '.apiValues.apiSecureKey')
             : trim($securekey);
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTag()
+    {
+        return $this->tag;
+    }
+
+    /**
+     * @param mixed $tag
+     *
+     * @return self
+     */
+    protected function setTag($tag)
+    {
+        $this->tag = $tag;
 
         return $this;
     }

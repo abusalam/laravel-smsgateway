@@ -37,7 +37,7 @@ return [
         'apiEndpoint'       => env('SMS_URL', 'https://msdgweb.mgov.gov.in/esms/sendsmsrequest'),
         'apiMobileNoParam'  => env('SMS_MOBILE_NO_PARAM', 'mobileno'),
         'apiSmsParam'       => env('SMS_SMS_PARAM', 'content'),
-        /* SMS Gateway Parameter Configurations */
+        /* SMS Gateway Constant Parameter Configurations */
         'apiParams'         => [
             'apiUserParam'      => env('SMS_USERNAME_PARAM', 'username'),
             'apiPassParam'      => env('SMS_PASSWORD_PARAM', 'password'),
@@ -54,6 +54,23 @@ return [
         ]
     ],
     /*=====  End of Default SMS Gateway API Configuration  ======*/
+
+    'onenessSms' => [
+        /* SMS Gateway API Endpoint Configurations */
+        'apiEndpoint'       => env('SMS_URL', 'https://myvfirst.com/smpp/sendsms'),
+        'apiMobileNoParam'  => env('SMS_MOBILE_NO_PARAM', 'to'),
+        'apiSmsParam'       => env('SMS_SMS_PARAM', 'text'),
+        'apiTagParam'       => env('SMS_TAG_PARAM', 'tag'),
+        /* SMS Gateway Constant Parameter Configurations */
+        'apiParams'         => [
+            'apiSenderIdParam'    => env('SMS_SENDER_ID_PARAM', 'from'),
+            'apiDlrUrlParam'      => env('SMS_API_DLR_URL_PARAM', 'dlr-url'),
+        ],
+        'apiValues'     => [
+            'apiSenderId'    => env('SMS_SENDER_ID', 'DUMMY'),
+            'apiDlrUrl'      => env('SMS_API_DLR_URL', env('APP_URL' . '/sms/status')),
+        ]
+    ],
 
     'local' => [
         /* SMS Gateway API Endpoint Configurations */

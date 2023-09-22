@@ -102,6 +102,20 @@ class SmsGateway implements SmsGatewayContract
     }
 
     /**
+     * @param mixed $templateId
+     *
+     * @return self
+     */
+    public function withTemplateId($templateId = '')
+    {
+        $this->senderid = $templateId == ''
+            ? config('smsgateway.' . $this->getGateway() . '.apiValues.apiTemplateId')
+            : trim($templateId);
+        //dump(config('smsgateway.' . $this->getGateway() . '.apiValues.apiTemplateId'));
+        return $this;
+    }
+
+    /**
      * Gets the Tag for the SMS
      * @param  mixed
      * @return self

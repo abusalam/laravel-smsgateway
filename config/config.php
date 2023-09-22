@@ -34,22 +34,24 @@ return [
     =============================================================*/
     'cdacSms' => [
         /* SMS Gateway API Endpoint Configurations */
-        'apiEndpoint'       => env('SMS_URL', 'https://msdgweb.mgov.gov.in/esms/sendsmsrequest'),
+        'apiEndpoint'       => env('SMS_URL', 'https://msdgweb.mgov.gov.in/esms/sendsmsrequestDLT'),
         'apiMobileNoParam'  => env('SMS_MOBILE_NO_PARAM', 'mobileno'),
         'apiSmsParam'       => env('SMS_SMS_PARAM', 'content'),
         /* SMS Gateway Constant Parameter Configurations */
         'apiParams'         => [
-            'apiUserParam'      => env('SMS_USERNAME_PARAM', 'username'),
-            'apiPassParam'      => env('SMS_PASSWORD_PARAM', 'password'),
-            'apiSenderIdParam'  => env('SMS_SENDER_ID_PARAM', 'senderid'),
-            'apiSecureKeyParam' => env('SMS_API_KEY_PARAM', 'key'),
+            'apiUserParam'        => env('SMS_USERNAME_PARAM', 'username'),
+            'apiPassParam'        => env('SMS_PASSWORD_PARAM', 'password'),
+            'apiSenderIdParam'    => env('SMS_SENDER_ID_PARAM', 'senderid'),
+            'apiTemplateIdParam'  => env('SMS_TEMPLATE_ID_PARAM', 'templateid'),
+            'apiSecureKeyParam'   => env('SMS_API_KEY_PARAM', 'key'),
             'apiServiceTypeParam' => env('SMS_SERVICE_TYPE_PARAM', 'smsservicetype'),
         ],
         'apiValues'     => [
-            'apiUser'       => env('SMS_USERNAME', 'dummyuser'),
-            'apiPass'       => sha1(trim(env('SMS_PASSWORD', 'dummypass'))),
-            'apiSenderId'   => env('SMS_SENDER_ID', 'DUMMY'),
-            'apiSecureKey'  => env('SMS_API_KEY', 'top-secret-dummy-key'),
+            'apiUser'        => env('SMS_USERNAME', 'dummyuser'),
+            'apiPass'        => sha1(trim(env('SMS_PASSWORD', 'dummypass'))),
+            'apiSenderId'    => env('SMS_SENDER_ID', 'DUMMY'),
+            'apiTemplateId'  => env('SMS_TEMPLATE_ID', '01235468238656'),
+            'apiSecureKey'   => env('SMS_API_KEY', 'top-secret-dummy-key'),
             'apiServiceType' => env('SMS_SERVICE_TYPE_PARAM', 'singlemsg'),
         ]
     ],

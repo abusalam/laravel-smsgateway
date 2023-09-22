@@ -21,6 +21,8 @@ class SmsGateway implements SmsGatewayContract
 
     protected $senderid;
 
+    protected $templateid;
+
     protected $securekey;
 
     protected $tag;
@@ -80,6 +82,7 @@ class SmsGateway implements SmsGatewayContract
         $form_params = [
             config('smsgateway.' . config('smsgateway.default') . '.apiMobileNoParam') => $this->getRecipients(),
             config('smsgateway.' . config('smsgateway.default') . '.apiSmsParam') => $this->getContents(),
+            config('smsgateway.' . config('smsgateway.default') . '.apiTemplateIdParam') => $this->getTemplateId(),
             config('smsgateway.' . config('smsgateway.default') . '.apiTagParam') => $this->getTag(),
             "smsservicetype" =>"singlemsg",
         ];
@@ -102,13 +105,21 @@ class SmsGateway implements SmsGatewayContract
     }
 
     /**
+     * @return mixed
+     */
+    public function getTemplateId()
+    {
+        return $this->templateid;
+    }
+
+    /**
      * @param mixed $templateId
      *
      * @return self
      */
     public function withTemplateId($templateId = '')
     {
-        $this->senderid = $templateId == ''
+        $this->templateid = $templateId == ''
             ? config('smsgateway.' . $this->getGateway() . '.apiValues.apiTemplateId')
             : trim($templateId);
         //dump(config('smsgateway.' . $this->getGateway() . '.apiValues.apiTemplateId'));

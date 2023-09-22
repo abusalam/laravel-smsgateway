@@ -123,6 +123,12 @@ class SmsGateway implements SmsGatewayContract
             ? config('smsgateway.' . $this->getGateway() . '.apiValues.apiTemplateId')
             : trim($templateId);
         //dump(config('smsgateway.' . $this->getGateway() . '.apiValues.apiTemplateId'));
+
+        $payload = $this->getPayload();
+        if (array_key_exists('templateid', $payload)) {
+            $payload['templateid'] = $this->templateid;
+            $this->setPayload($payload);
+        }
         return $this;
     }
 

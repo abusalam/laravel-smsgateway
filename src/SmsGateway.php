@@ -37,11 +37,13 @@ class SmsGateway implements SmsGatewayContract
             ->setApiEndpoint()
             ->setUsername()
             ->setSenderid()
-            ->setSecurekey();
+            ->setSecurekey()
+            ->setPayload($this->buildConfigParams());
     }
 
     public function sendSms()
     {
+        $this->hashPayload();
         $post = curl_init();
         //curl_setopt($post, CURLOPT_SSLVERSION, 5); // uncomment for systems supporting TLSv1.1 only
         //curl_setopt($post, CURLOPT_SSLVERSION, 6); // use for systems supporting TLSv1.2 or comment the line
@@ -52,6 +54,7 @@ class SmsGateway implements SmsGatewayContract
         curl_setopt($post, CURLOPT_POSTFIELDS, http_build_query($this->getPayload()));
         curl_setopt($post, CURLOPT_RETURNTRANSFER, 1);
         $resp['data'] = curl_exec($post);
+        $resp['payload'] = $this->getPayload();
         if($resp['data'] === false) {
             $resp['error'] =  curl_error($post);
         }
@@ -62,7 +65,15 @@ class SmsGateway implements SmsGatewayContract
 
     protected function hashPayload()
     {
-        $payload = $this->buildConfigParams();
+        $payload = $this->getPayload();
+        $form_params = [
+            config('smsgateway.' . config('smsgateway.default') . '.apiMobileNoParam') => $this->getRecipients(),
+            config('smsgateway.' . config('smsgateway.default') . '.apiSmsParam') => $this->getContents(),
+            config('smsgateway.' . config('smsgateway.default') . '.apiTemplateIdParam') => $this->getTemplateId(),
+            config('smsgateway.' . config('smsgateway.default') . '.apiTagParam') => $this->getTag(),
+        ];
+        $payload = array_merge($form_params, $payload);
+
         if (array_key_exists('key', $payload)) {
             $payload['key'] = hash('sha512', $this->getUsername().$this->getSenderid().$this->getContents().$this->getSecurekey());
         }
@@ -80,16 +91,11 @@ class SmsGateway implements SmsGatewayContract
         );
 
         $form_params = [
-            config('smsgateway.' . config('smsgateway.default') . '.apiMobileNoParam') => $this->getRecipients(),
-            config('smsgateway.' . config('smsgateway.default') . '.apiSmsParam') => $this->getContents(),
-            config('smsgateway.' . config('smsgateway.default') . '.apiTemplateIdParam') => $this->getTemplateId(),
-            config('smsgateway.' . config('smsgateway.default') . '.apiTagParam') => $this->getTag(),
             "smsservicetype" =>"singlemsg",
         ];
-        $data = array_merge($form_params, $configParams);
+        $payload = array_merge($form_params, $configParams);
 
-        //dump($data);
-        return $data;
+        return $payload;
     }
 
     /**
@@ -120,14 +126,14 @@ class SmsGateway implements SmsGatewayContract
     public function withTemplateId($templateId = '')
     {
         $this->templateid = $templateId == ''
-            ? config('smsgateway.' . $this->getGateway() . '.apiValues.apiTemplateId')
-            : trim($templateId);
-        //dump(config('smsgateway.' . $this->getGateway() . '.apiValues.apiTemplateId'));
-
+        ? config('smsgateway.' . $this->getGateway() . '.apiValues.apiTemplateId')
+        : trim($templateId);
         $payload = $this->getPayload();
-        if (array_key_exists('templateid', $payload)) {
-            $payload['templateid'] = $this->templateid;
-            $this->setPayload($payload);
+        if(is_array($payload)) {
+            if (array_key_exists('templateid', $payload)) {
+                $payload['templateid'] = $this->templateid;
+                $this->setPayload($payload);
+            }
         }
         return $this;
     }
@@ -336,7 +342,7 @@ class SmsGateway implements SmsGatewayContract
     protected function setPayload($payload)
     {
         $this->payload = $payload;
-
+        //dump($payload);
         return $this;
     }
 
